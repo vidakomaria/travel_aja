@@ -16,11 +16,7 @@ get_header();
 				<div class="home-hero__copy">
 					<h1 id="home-hero-title"><?php esc_html_e( 'Jelajahi Banyuwangi bersama kami', 'custom-theme' ); ?></h1>
 					<div class="home-hero__description">
-						<?php if ( trim( (string) get_post_field( 'post_content', get_the_ID() ) ) ) : ?>
-							<?php the_content(); ?>
-						<?php else : ?>
-							<p><?php esc_html_e( 'Pilih paket wisata, destinasi, dan transportasi untuk perjalanan Anda.', 'custom-theme' ); ?></p>
-						<?php endif; ?>
+						<p><?php esc_html_e( 'Pilih paket wisata, destinasi, dan transportasi untuk perjalanan Anda.', 'custom-theme' ); ?></p>
 					</div>
 					<form class="home-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 						<label class="home-search__label" for="home-search-input"><?php esc_html_e( 'Cari destinasi, paket wisata, atau artikel', 'custom-theme' ); ?></label>
@@ -34,6 +30,13 @@ get_header();
 				</div>
 			</div>
 		</section>
+		<?php if ( trim( (string) get_post_field( 'post_content', get_the_ID() ) ) ) : ?>
+			<section class="home-page-content" aria-label="<?php echo esc_attr__( 'Konten Beranda', 'custom-theme' ); ?>">
+				<div class="container">
+					<?php the_content(); ?>
+				</div>
+			</section>
+		<?php endif; ?>
 	<?php endwhile; ?>
 
 	<?php
@@ -51,18 +54,7 @@ get_header();
 			'intro'     => __( 'Jelajahi tempat menarik untuk perjalanan berikutnya.', 'custom-theme' ),
 			'limit'     => 4,
 		),
-		array(
-			'post_type' => 'transportasi',
-			'title'     => __( 'Transportasi Perjalanan', 'custom-theme' ),
-			'intro'     => __( 'Pilih kendaraan yang sesuai dengan kebutuhan perjalanan Anda.', 'custom-theme' ),
-			'limit'     => 4,
-		),
-		array(
-			'post_type' => 'post',
-			'title'     => __( 'Panduan Wisata', 'custom-theme' ),
-			'intro'     => __( 'Baca tips dan cerita perjalanan terbaru.', 'custom-theme' ),
-			'limit'     => 3,
-		),
+
 	);
 	?>
 
@@ -93,17 +85,85 @@ get_header();
 				<?php if ( $items->have_posts() ) : ?>
 					<div class="home-cards">
 						<?php while ( $items->have_posts() ) : $items->the_post(); ?>
-							<article <?php post_class( 'home-card' ); ?>>
-								<?php if ( has_post_thumbnail() ) : ?>
-									<a class="home-card__media" href="<?php echo esc_url( get_permalink() ); ?>" aria-hidden="true" tabindex="-1">
-										<?php the_post_thumbnail( 'medium_large', array( 'class' => 'home-card__image' ) ); ?>
+							<?php if ( 'paket_wisata' === $section['post_type'] ) : ?>
+								<?php
+								$duration = trim( (string) get_post_meta( get_the_ID(), '_custom_theme_package_duration', true ) );
+								$location = trim( (string) get_post_meta( get_the_ID(), '_custom_theme_package_location', true ) );
+								$price    = get_post_meta( get_the_ID(), '_custom_theme_package_price', true );
+								$badge = custom_theme_card_badge( get_the_ID(), 'package' );
+								?>
+								<article <?php post_class( 'home-card home-card--package' ); ?>>
+									<div class="package-card__media">
+										<?php if ( has_post_thumbnail() ) : ?>
+											<a href="<?php echo esc_url( get_permalink() ); ?>" aria-hidden="true" tabindex="-1">
+												<?php the_post_thumbnail( 'medium_large', array( 'class' => 'package-card__image' ) ); ?>
+											</a>
+										<?php endif; ?>
+										<?php if ( $badge ) : ?>
+											<span class="package-card__badge card-badge--<?php echo esc_attr( $badge ); ?>"><?php echo esc_html( custom_theme_badge_options()[ $badge ] ); ?></span>
+										<?php endif; ?>
+									</div>
+									<div class="package-card__body">
+										<h3><a href="<?php echo esc_url( get_permalink() ); ?>"><?php echo esc_html( get_the_title() ); ?></a></h3>
+										<?php if ( $duration || $location ) : ?>
+											<div class="package-card__facts">
+												<?php if ( $duration ) : ?>
+													<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><?php echo esc_html( $duration ); ?></span>
+												<?php endif; ?>
+												<?php if ( $location ) : ?>
+													<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><?php echo esc_html( $location ); ?></span>
+												<?php endif; ?>
+											</div>
+										<?php endif; ?>
+										<div class="package-card__footer">
+											<?php if ( '' !== (string) $price ) : ?>
+												<div class="package-card__price">
+													<span><?php esc_html_e( 'MULAI DARI', 'custom-theme' ); ?></span>
+													<strong>Rp <?php echo esc_html( number_format( (int) $price, 0, ',', '.' ) ); ?></strong><small>/PAX</small>
+												</div>
+											<?php endif; ?>
+											<a class="package-card__button" href="<?php echo esc_url( get_permalink() ); ?>"><?php esc_html_e( 'Lihat Detail', 'custom-theme' ); ?></a>
+										</div>
+									</div>
+								</article>
+							<?php elseif ( 'destinasi' === $section['post_type'] ) : ?>
+								<?php
+								$location = get_post_meta( get_the_ID(), '_custom_theme_destination_location', true );
+								$rating = get_post_meta( get_the_ID(), '_custom_theme_destination_rating', true );
+								$badge = custom_theme_card_badge( get_the_ID(), 'destination' );
+								?>
+								<article <?php post_class( 'destination-card' ); ?>>
+									<a class="destination-card__link" href="<?php echo esc_url( get_permalink() ); ?>">
+										<?php if ( has_post_thumbnail() ) : ?>
+											<?php the_post_thumbnail( 'large', array( 'class' => 'destination-card__image', 'alt' => '' ) ); ?>
+										<?php endif; ?>
+										<?php if ( $badge ) : ?>
+											<span class="package-card__badge card-badge--<?php echo esc_attr( $badge ); ?>"><?php echo esc_html( custom_theme_badge_options()[ $badge ] ); ?></span>
+										<?php endif; ?>
+										<div class="destination-card__content">
+											<h3><?php the_title(); ?></h3>
+											<?php if ( $location || '' !== (string) $rating ) : ?>
+												<div class="destination-card__facts">
+													<?php if ( $location ) : ?><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg><?php echo esc_html( $location ); ?></span><?php endif; ?>
+													<?php if ( '' !== (string) $rating ) : ?><span aria-label="<?php echo esc_attr( sprintf( __( 'Rating %s dari 5', 'custom-theme' ), $rating ) ); ?>"><span class="destination-card__star" aria-hidden="true">★</span><?php echo esc_html( number_format( (float) $rating, 1 ) ); ?></span><?php endif; ?>
+												</div>
+											<?php endif; ?>
+										</div>
 									</a>
-								<?php endif; ?>
-								<div class="home-card__body">
-									<h3><a href="<?php echo esc_url( get_permalink() ); ?>"><?php echo esc_html( get_the_title() ); ?></a></h3>
-									<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 22 ) ); ?></p>
-								</div>
-							</article>
+								</article>
+							<?php else : ?>
+								<article <?php post_class( 'home-card' ); ?>>
+									<?php if ( has_post_thumbnail() ) : ?>
+										<a class="home-card__media" href="<?php echo esc_url( get_permalink() ); ?>" aria-hidden="true" tabindex="-1">
+											<?php the_post_thumbnail( 'medium_large', array( 'class' => 'home-card__image' ) ); ?>
+										</a>
+									<?php endif; ?>
+									<div class="home-card__body">
+										<h3><a href="<?php echo esc_url( get_permalink() ); ?>"><?php echo esc_html( get_the_title() ); ?></a></h3>
+										<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 22 ) ); ?></p>
+									</div>
+								</article>
+							<?php endif; ?>
 						<?php endwhile; ?>
 					</div>
 				<?php else : ?>
@@ -115,6 +175,10 @@ get_header();
 		</section>
 		<?php wp_reset_postdata(); ?>
 	<?php endforeach; ?>
+<div class="lower-home">
+	<?php get_template_part( 'template-parts/home-transport' ); ?>
+	<?php get_template_part( 'template-parts/home-extras' ); ?>
+</div>
 </main>
 
 <?php get_footer(); ?>

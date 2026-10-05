@@ -40,6 +40,8 @@ get_header();
 			</article>
 		<?php endwhile; ?>
 
+		<?php if ( is_singular() && ( comments_open() || get_comments_number() ) ) : comments_template(); endif; ?>
+
 		<?php the_posts_pagination(); ?>
 	<?php else : ?>
 		<?php if ( is_search() ) : ?>

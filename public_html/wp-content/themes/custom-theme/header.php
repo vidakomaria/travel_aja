@@ -12,7 +12,7 @@
 <header class="site-header">
 	<div class="container site-header__inner">
 		<a class="site-title" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-			<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
+			<?php if ( has_custom_logo() ) : $logo_id = get_theme_mod( 'custom_logo' ); echo wp_get_attachment_image( $logo_id, 'full', false, array( 'class' => 'site-logo', 'alt' => get_bloginfo( 'name' ) ) ); else : echo esc_html( get_bloginfo( 'name' ) ); endif; ?>
 		</a>
 		<nav class="site-nav" aria-label="<?php esc_attr_e( 'Navigasi utama', 'custom-theme' ); ?>">
 			<?php
