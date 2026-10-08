@@ -1,4 +1,0 @@
-[27-Jun-2018 20:52:35 America/Chicago] PHP Fatal error:  Call to undefined function the_ID() in /home/transije/public_html/wp-content/themes/twentyfifteen/content.php on line 13
-[25-Sep-2018 13:52:52 UTC] PHP Fatal error:  Call to undefined function the_id() in /home/transije/public_html/wp-content/themes/twentyfifteen/content-link.php on line 13
-[05-Oct-2018 16:42:12 UTC] PHP Fatal error:  Call to undefined function post_password_required() in /home/transije/public_html/wp-content/themes/twentyfifteen/comments.php on line 18
-[06-Oct-2018 08:29:39 UTC] PHP Fatal error:  Call to undefined function the_id() in /home/transije/public_html/wp-content/themes/twentyfifteen/content-search.php on line 13

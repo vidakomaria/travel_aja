@@ -27,7 +27,7 @@ add_action( 'add_meta_boxes_paket_wisata', function () {
 			</p>
 			<p>
 				<label for="custom-theme-package-location"><strong><?php esc_html_e( 'Lokasi', 'custom-theme' ); ?></strong></label><br>
-				<input id="custom-theme-package-location" class="widefat" type="text" name="custom_theme_package_location" value="<?php echo esc_attr( $location ); ?>" placeholder="<?php echo esc_attr__( 'Contoh: Banyuwangi', 'custom-theme' ); ?>">
+				<input id="custom-theme-package-location" class="widefat" type="text" name="custom_theme_package_location" value="<?php echo esc_attr( $location ); ?>" placeholder="<?php echo esc_attr__( 'Contoh: Indonesia', 'custom-theme' ); ?>">
 			</p>
 			<p>
 				<label for="custom-theme-package-price"><strong><?php esc_html_e( 'Harga mulai dari (Rupiah per orang)', 'custom-theme' ); ?></strong></label><br>

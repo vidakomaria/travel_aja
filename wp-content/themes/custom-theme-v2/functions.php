@@ -55,17 +55,17 @@ add_action(
 		$fields = array(
 			'travel_v2_hero_kicker' => array(
 				'label'   => __( 'Teks kecil hero', 'custom-theme-v2' ),
-				'default' => 'Paket wisata dan sewa kendaraan di Bali',
+				'default' => 'Paket wisata dan sewa kendaraan di Indonesia',
 				'type'    => 'text',
 			),
 			'travel_v2_hero_title' => array(
 				'label'   => __( 'Judul hero', 'custom-theme-v2' ),
-				'default' => 'Liburan Bali jadi lebih mudah',
+				'default' => 'Jelajahi Indonesia dengan lebih mudah',
 				'type'    => 'text',
 			),
 			'travel_v2_hero_description' => array(
 				'label'   => __( 'Deskripsi hero', 'custom-theme-v2' ),
-				'default' => 'Temukan paket perjalanan pilihan dan kendaraan yang siap menemani setiap rute liburan Anda di Bali.',
+				'default' => 'Temukan paket perjalanan pilihan dan kendaraan yang siap menemani rute liburan Anda.',
 				'type'    => 'textarea',
 			),
 		);
@@ -110,4 +110,3 @@ function travel_aja_v2_price( $price, $fallback = 'Hubungi kami' ) {
 	}
 	return 'Rp ' . number_format( (float) $price, 0, ',', '.' );
 }
-

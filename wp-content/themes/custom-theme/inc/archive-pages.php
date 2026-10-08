@@ -5,33 +5,33 @@ function custom_theme_listing_config( $post_type ) {
 	$configs = array(
 		'paket_wisata' => array(
 			'slug'        => 'paket-wisata',
-			'label'       => 'Paket Wisata Transijen',
-			'title'       => 'Temukan Paket Wisata Banyuwangi',
-			'description' => 'Jelajahi Banyuwangi melalui perjalanan yang dirancang sesuai waktu, minat, dan gaya perjalananmu.',
+			'label'       => 'Paket Wisata Indonesia',
+			'title'       => 'Temukan Paket Wisata Indonesia',
+			'description' => 'Jelajahi berbagai destinasi di Indonesia melalui perjalanan yang dirancang sesuai waktu, minat, dan gaya perjalananmu.',
 			'placeholder' => 'Cari paket wisata atau destinasi...',
 			'count'       => 'Paket Wisata',
 			'cta_title'   => 'Punya rencana sendiri?',
-			'cta_text'    => 'Diskusikan kebutuhan perjalananmu bersama Transijen dan kami bantu menyesuaikan perjalananmu di Banyuwangi.',
+			'cta_text'    => 'Diskusikan kebutuhan perjalananmu bersama Travel Aja dan kami bantu memilih perjalanan yang sesuai.',
 		),
 		'destinasi' => array(
 			'slug'        => 'destinasi',
 			'label'       => 'Explore Destinasi',
-			'title'       => 'Jelajahi Destinasi Terbaik di Banyuwangi',
-			'description' => 'Temukan beragam destinasi di Banyuwangi, dari gunung dan kawah hingga pantai, pulau, hutan, budaya, dan berbagai pengalaman petualangan.',
+			'title'       => 'Jelajahi Destinasi Indonesia',
+			'description' => 'Temukan beragam destinasi di Indonesia, dari gunung dan kawah hingga pantai, pulau, hutan, budaya, dan berbagai pengalaman petualangan.',
 			'placeholder' => 'Cari destinasi wisata...',
 			'count'       => 'Destinasi',
 			'cta_title'   => 'Sudah menemukan destinasi pilihanmu?',
-			'cta_text'    => 'Rencanakan perjalananmu di Banyuwangi bersama Transijen. Kami siap membantu menyesuaikan perjalanan dengan waktu, minat, dan kebutuhanmu.',
+			'cta_text'    => 'Rencanakan perjalananmu bersama Travel Aja. Kami siap membantu menyesuaikan perjalanan dengan waktu, minat, dan kebutuhanmu.',
 		),
 		'transportasi' => array(
 			'slug'        => 'transportasi',
-			'label'       => 'Transportasi Banyuwangi',
-			'title'       => 'Sewa Transportasi untuk Menjelajahi Banyuwangi',
-			'description' => 'Temukan pilihan motor, mobil, dan layanan kendaraan dengan driver untuk membantu perjalanan Anda menjelajahi Banyuwangi dengan lebih nyaman dan fleksibel.',
+			'label'       => 'Transportasi Wisata',
+			'title'       => 'Sewa Kendaraan untuk Menjelajahi Indonesia',
+			'description' => 'Temukan pilihan motor, mobil, dan layanan kendaraan dengan pengemudi untuk membantu perjalanan Anda di berbagai destinasi Indonesia.',
 			'placeholder' => 'Cari kendaraan atau tipe transportasi...',
 			'count'       => 'Pilihan Transportasi',
 			'cta_title'   => 'Butuh transportasi untuk perjalanan Anda?',
-			'cta_text'    => 'Diskusikan kebutuhan kendaraan Anda bersama tim Transijen dan pilih opsi transportasi yang paling sesuai.',
+			'cta_text'    => 'Diskusikan kebutuhan kendaraan Anda bersama Travel Aja dan pilih opsi transportasi yang paling sesuai.',
 		),
 	);
 	return isset( $configs[ $post_type ] ) ? $configs[ $post_type ] : $configs['paket_wisata'];
@@ -45,6 +45,47 @@ function custom_theme_listing_url( $post_type ) {
 	}
 	$archive = get_post_type_archive_link( $post_type );
 	return $archive ? $archive : home_url( '/' );
+}
+
+/** Present legacy regional article categories under the current site focus. */
+function custom_theme_guide_category_label( $label ) {
+	if ( stripos( (string) $label, 'Banyuwangi' ) !== false ) {
+		return 'Jelajah Indonesia';
+	}
+	if ( 0 === strcasecmp( trim( (string) $label ), 'culinary' ) ) {
+		return 'Kuliner';
+	}
+	return (string) $label;
+}
+
+/** Use broad Indonesian destination wording in guide listings. */
+function custom_theme_guide_public_text( $text ) {
+	$text = preg_replace( '/Banyuwangi\s+Jawa Timur/i', 'Jawa Timur', (string) $text );
+	$text = preg_replace( '/Banyuwangi\s+East Java/i', 'East Java', $text );
+	return str_ireplace( 'Banyuwangi', 'Indonesia', $text );
+}
+
+/** Collapse legacy regional categories that share the same public label. */
+function custom_theme_guide_display_categories( $categories ) {
+	$display_categories = array();
+	$labels             = array();
+
+	foreach ( $categories as $category ) {
+		$label = custom_theme_guide_category_label( $category->name );
+		if ( isset( $labels[ $label ] ) ) {
+			$display_categories[ $labels[ $label ] ]['count'] += (int) $category->count;
+			continue;
+		}
+
+		$labels[ $label ] = count( $display_categories );
+		$display_categories[] = array(
+			'id'    => (int) $category->term_id,
+			'label' => $label,
+			'count' => (int) $category->count,
+		);
+	}
+
+	return $display_categories;
 }
 
 function custom_theme_listing_hero_image() {
@@ -139,14 +180,14 @@ function custom_theme_render_listing_card( $post_type ) {
 				<?php if ( $location ) : ?><span class="listing-card__eyebrow">● <?php echo esc_html( $location ); ?></span><?php endif; ?>
 				<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 				<?php if ( $rating ) : ?><div class="listing-card__rating">★ <?php echo esc_html( number_format( (float) $rating, 1 ) ); ?></div><?php endif; ?>
-				<div class="listing-card__facts"><span>◷ <?php echo esc_html( $duration ?: 'Durasi fleksibel' ); ?></span><span>● <?php echo esc_html( $location ?: 'Banyuwangi' ); ?></span></div>
+				<div class="listing-card__facts"><span>◷ <?php echo esc_html( $duration ?: 'Durasi fleksibel' ); ?></span><span>● <?php echo esc_html( $location ?: 'Indonesia' ); ?></span></div>
 				<div class="listing-card__footer"><span><small>Mulai dari</small><strong><?php echo $price ? esc_html( 'Rp ' . number_format_i18n( (float) $price ) ) : 'Hubungi Kami'; ?></strong><?php if ( $price ) : ?><small>/pax</small><?php endif; ?></span><a href="<?php the_permalink(); ?>">Lihat Detail</a></div>
 			<?php elseif ( 'destinasi' === $post_type ) :
 				$location   = get_post_meta( $post_id, '_custom_theme_destination_location', true );
 				$rating     = get_post_meta( $post_id, '_custom_theme_destination_rating', true );
 				$category   = get_post_meta( $post_id, '_custom_theme_destination_category', true );
 				$highlights = array_filter( array_map( 'trim', explode( ',', (string) get_post_meta( $post_id, '_custom_theme_destination_highlights', true ) ) ) ); ?>
-				<div class="listing-card__meta"><span class="listing-card__eyebrow">● <?php echo esc_html( $location ?: 'Banyuwangi' ); ?></span><?php if ( $category ) : ?><span><?php echo esc_html( $category ); ?></span><?php endif; ?></div>
+				<div class="listing-card__meta"><span class="listing-card__eyebrow">● <?php echo esc_html( $location ?: 'Indonesia' ); ?></span><?php if ( $category ) : ?><span><?php echo esc_html( $category ); ?></span><?php endif; ?></div>
 				<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 				<?php if ( $rating ) : ?><div class="listing-card__rating">★ <?php echo esc_html( number_format( (float) $rating, 1 ) ); ?></div><?php endif; ?>
 				<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 16 ) ); ?></p>

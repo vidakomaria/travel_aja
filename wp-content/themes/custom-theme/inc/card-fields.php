@@ -20,7 +20,7 @@ add_action( 'add_meta_boxes_destinasi', function () {
 		$badge = custom_theme_card_badge( $post->ID, 'destination' );
 		?>
 		<p><label for="destination-location"><?php esc_html_e( 'Lokasi', 'custom-theme' ); ?></label><br>
-		<input class="widefat" id="destination-location" name="custom_theme_destination_location" type="text" value="<?php echo esc_attr( get_post_meta( $post->ID, '_custom_theme_destination_location', true ) ); ?>" placeholder="Banyuwangi"></p>
+		<input class="widefat" id="destination-location" name="custom_theme_destination_location" type="text" value="<?php echo esc_attr( get_post_meta( $post->ID, '_custom_theme_destination_location', true ) ); ?>" placeholder="Indonesia"></p>
 		<p><label for="destination-rating"><?php esc_html_e( 'Rating (0–5)', 'custom-theme' ); ?></label><br>
 		<input id="destination-rating" name="custom_theme_destination_rating" type="number" min="0" max="5" step="0.1" value="<?php echo esc_attr( get_post_meta( $post->ID, '_custom_theme_destination_rating', true ) ); ?>">
 		<br><small><?php esc_html_e( 'Isi berdasarkan rating yang Anda miliki; kosongkan jika belum ada.', 'custom-theme' ); ?></small></p>

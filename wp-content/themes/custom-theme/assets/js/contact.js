@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		if (!form.reportValidity()) return;
 		const data = new FormData(form);
 		const message = [
-			'Halo Transijen, saya ingin berkonsultasi tentang perjalanan.',
+			'Halo Travel Aja, saya ingin berkonsultasi tentang perjalanan.',
 			'',
 			'Nama: ' + data.get('name'),
 			'Jumlah orang: ' + data.get('people'),

@@ -13,9 +13,9 @@ $package_url    = custom_theme_listing_url( 'paket_wisata' );
 $transport_url  = custom_theme_listing_url( 'transportasi' );
 $guide_url      = travel_aja_v2_page_url( 'panduan-wisata', '/panduan-wisata/' );
 $contact_url    = travel_aja_v2_page_url( 'kontak-kami', '/kontak-kami/' );
-$hero_kicker    = get_theme_mod( 'travel_v2_hero_kicker', 'Paket wisata dan sewa kendaraan di Bali' );
-$hero_title     = get_theme_mod( 'travel_v2_hero_title', 'Liburan Bali jadi lebih mudah' );
-$hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket perjalanan pilihan dan kendaraan yang siap menemani setiap rute liburan Anda di Bali.' );
+$hero_kicker    = get_theme_mod( 'travel_v2_hero_kicker', 'Paket wisata dan sewa kendaraan di Indonesia' );
+$hero_title     = get_theme_mod( 'travel_v2_hero_title', 'Jelajahi Indonesia dengan lebih mudah' );
+$hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket perjalanan pilihan dan kendaraan yang siap menemani rute liburan Anda.' );
 ?>
 
 <main id="main-content" class="v2-home">
@@ -35,7 +35,7 @@ $hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket pe
 	<section class="v2-section" id="paket-wisata">
 		<div class="v2-shell">
 			<header class="v2-section__heading">
-				<div><span class="v2-eyebrow"><?php esc_html_e( 'Pilihan perjalanan', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Paket Wisata Pilihan', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Pilih pengalaman terbaik di Bali dengan perjalanan yang sudah disusun agar liburan Anda lebih praktis.', 'custom-theme-v2' ); ?></p></div>
+				<div><span class="v2-eyebrow"><?php esc_html_e( 'Pilihan perjalanan', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Paket Wisata Pilihan', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Pilih pengalaman terbaik dari berbagai destinasi di Indonesia dengan perjalanan yang disusun agar liburan lebih praktis.', 'custom-theme-v2' ); ?></p></div>
 				<a href="<?php echo esc_url( $package_url ); ?>"><?php esc_html_e( 'Lihat semua paket', 'custom-theme-v2' ); ?> <span>→</span></a>
 			</header>
 			<?php
@@ -61,12 +61,12 @@ $hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket pe
 						?>
 						<article <?php post_class( 'v2-package-card' ); ?>>
 							<a class="v2-package-card__media" href="<?php the_permalink(); ?>">
-								<?php if ( has_post_thumbnail() ) : the_post_thumbnail( 'large' ); else : ?><span class="v2-placeholder">BALI</span><?php endif; ?>
+								<?php if ( has_post_thumbnail() ) : the_post_thumbnail( 'large' ); else : ?><span class="v2-placeholder">INDONESIA</span><?php endif; ?>
 								<?php if ( $badge ) : ?><span class="v2-badge"><?php echo esc_html( isset( $labels[ $badge ] ) ? $labels[ $badge ] : $badge ); ?></span><?php endif; ?>
 							</a>
 							<div class="v2-package-card__body">
 								<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-								<div class="v2-package-card__facts"><span>◷ <?php echo esc_html( $duration ?: 'Durasi fleksibel' ); ?></span><span>● <?php echo esc_html( $location ?: 'Bali' ); ?></span></div>
+								<div class="v2-package-card__facts"><span>◷ <?php echo esc_html( $duration ?: 'Durasi fleksibel' ); ?></span><span>● <?php echo esc_html( $location ?: 'Indonesia' ); ?></span></div>
 								<div class="v2-package-card__footer"><span><small><?php esc_html_e( 'Mulai dari', 'custom-theme-v2' ); ?></small><strong><?php echo esc_html( travel_aja_v2_price( $price ) ); ?></strong><?php if ( '' !== (string) $price ) : ?><small>/pax</small><?php endif; ?></span><a href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( sprintf( 'Lihat %s', get_the_title() ) ); ?>">→</a></div>
 							</div>
 						</article>
@@ -81,7 +81,7 @@ $hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket pe
 	<section class="v2-section v2-section--soft" id="sewa-kendaraan">
 		<div class="v2-shell">
 			<header class="v2-section__heading">
-				<div><span class="v2-eyebrow"><?php esc_html_e( 'Bebas menjelajah', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Sewa Kendaraan di Bali', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Motor dan mobil pilihan untuk perjalanan harian, liburan keluarga, atau rute khusus selama di Bali.', 'custom-theme-v2' ); ?></p></div>
+				<div><span class="v2-eyebrow"><?php esc_html_e( 'Bebas menjelajah', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Sewa Kendaraan', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Motor dan mobil pilihan untuk perjalanan harian, liburan keluarga, atau rute khusus di destinasi pilihan Anda.', 'custom-theme-v2' ); ?></p></div>
 				<a href="<?php echo esc_url( $transport_url ); ?>"><?php esc_html_e( 'Lihat semua kendaraan', 'custom-theme-v2' ); ?> <span>→</span></a>
 			</header>
 			<?php
@@ -129,40 +129,17 @@ $hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket pe
 		</div>
 	</section>
 
-	<?php
-	$comments = get_comments(
-		array(
-			'status'  => 'approve',
-			'type'    => 'comment',
-			'number'  => 3,
-			'orderby' => 'comment_date_gmt',
-			'order'   => 'DESC',
-		)
-	);
-	?>
-	<?php if ( $comments || current_user_can( 'moderate_comments' ) ) : ?>
-		<section class="v2-section v2-reviews" id="ulasan">
-			<div class="v2-shell">
-				<header class="v2-section__heading v2-section__heading--center"><div><span class="v2-eyebrow"><?php esc_html_e( 'Cerita pelanggan', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Pengalaman Mereka Bersama Kami', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Komentar terbaru yang telah disetujui melalui moderasi WordPress.', 'custom-theme-v2' ); ?></p></div></header>
-				<?php if ( $comments ) : ?><div class="v2-review-grid">
-					<?php foreach ( $comments as $comment ) : ?>
-						<article class="v2-review-card"><span class="v2-review-card__quote">“</span><blockquote><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $comment->comment_content ), 34 ) ); ?></blockquote><footer><span class="v2-review-card__avatar"><?php echo esc_html( strtoupper( substr( $comment->comment_author ?: 'T', 0, 1 ) ) ); ?></span><span><strong><?php echo esc_html( $comment->comment_author ?: 'Pengunjung' ); ?></strong><small><?php echo esc_html( get_the_title( $comment->comment_post_ID ) ); ?></small></span></footer></article>
-					<?php endforeach; ?>
-				</div><?php else : ?><p class="v2-empty"><?php esc_html_e( 'Belum ada komentar yang disetujui. Komentar pengunjung akan tampil otomatis setelah dimoderasi.', 'custom-theme-v2' ); ?></p><?php endif; ?>
-			</div>
-		</section>
-	<?php endif; ?>
-
 	<section class="v2-section v2-section--articles" id="artikel">
 		<div class="v2-shell">
 			<header class="v2-section__heading">
-				<div><span class="v2-eyebrow"><?php esc_html_e( 'Inspirasi perjalanan', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Artikel & Tips Liburan Bali', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Panduan singkat agar Anda bisa menyusun perjalanan dengan lebih percaya diri.', 'custom-theme-v2' ); ?></p></div>
+				<div><span class="v2-eyebrow"><?php esc_html_e( 'Inspirasi perjalanan', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Artikel & Tips Wisata Indonesia', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Temukan inspirasi destinasi dan panduan perjalanan dalam bahasa Indonesia.', 'custom-theme-v2' ); ?></p></div>
 				<a href="<?php echo esc_url( $guide_url ); ?>"><?php esc_html_e( 'Lihat semua artikel', 'custom-theme-v2' ); ?> <span>→</span></a>
 			</header>
 			<?php
 			$articles = new WP_Query(
 				array(
 					'post_type'           => 'post',
+					'post__in'            => array( 190, 195, 197, 199 ),
 					'post_status'         => 'publish',
 					'posts_per_page'      => 3,
 					'ignore_sticky_posts' => true,
@@ -179,9 +156,8 @@ $hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket pe
 	</section>
 
 	<section class="v2-cta">
-		<div class="v2-shell v2-cta__inner"><div><span class="v2-eyebrow"><?php esc_html_e( 'Rencanakan perjalanan Anda', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Sudah siap menikmati Bali?', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Ceritakan kebutuhan perjalanan Anda. Tim kami akan membantu memilih paket dan kendaraan yang paling sesuai.', 'custom-theme-v2' ); ?></p></div><a class="v2-button" href="<?php echo esc_url( $contact_url ); ?>"><?php esc_html_e( 'Konsultasi Sekarang', 'custom-theme-v2' ); ?> →</a></div>
+		<div class="v2-shell v2-cta__inner"><div><span class="v2-eyebrow"><?php esc_html_e( 'Rencanakan perjalanan Anda', 'custom-theme-v2' ); ?></span><h2><?php esc_html_e( 'Siap menjelajahi Indonesia?', 'custom-theme-v2' ); ?></h2><p><?php esc_html_e( 'Ceritakan kebutuhan perjalanan Anda. Tim kami akan membantu memilih paket dan kendaraan yang paling sesuai.', 'custom-theme-v2' ); ?></p></div><a class="v2-button" href="<?php echo esc_url( $contact_url ); ?>"><?php esc_html_e( 'Konsultasi Sekarang', 'custom-theme-v2' ); ?> →</a></div>
 	</section>
 </main>
 
 <?php get_footer(); ?>
-

@@ -1,2 +1,0 @@
-[07-Oct-2018 15:45:32 UTC] PHP Fatal error:  Call to undefined function language_attributes() in /home/transije/public_html/wp-content/themes/twentysixteen/header.php on line 13
-[08-Oct-2018 04:56:28 UTC] PHP Fatal error:  Call to undefined function get_header() in /home/transije/public_html/wp-content/themes/twentysixteen/archive.php on line 19

@@ -62,6 +62,12 @@ body.travel-aja-v2 a {
 	margin-inline: auto;
 }
 
+/* Match inherited inner-page containers to the homepage shell. */
+body.travel-aja-v2:not(.home) .container {
+	width: min(1180px, calc(100% - 48px));
+	margin-inline: auto;
+}
+
 .v2-header {
 	position: absolute;
 	z-index: 100;
@@ -961,6 +967,10 @@ body.travel-aja-v2:not(.home) .contact-hero {
 		width: min(100% - 34px, 720px);
 	}
 
+	body.travel-aja-v2:not(.home) .container {
+		width: min(100% - 34px, 720px);
+	}
+
 	.v2-header__inner {
 		min-height: 68px;
 	}
@@ -1072,6 +1082,10 @@ body.travel-aja-v2:not(.home) .contact-hero {
 
 @media (max-width: 560px) {
 	.v2-shell {
+		width: min(100% - 28px, 520px);
+	}
+
+	body.travel-aja-v2:not(.home) .container {
 		width: min(100% - 28px, 520px);
 	}
 

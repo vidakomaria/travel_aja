@@ -1,2 +1,0 @@
-2025-08-01T23:26:13+00:00 CRITICAL Allowed memory size of 134217728 bytes exhausted (tried to allocate 1245184 bytes) in /home/transije/public_html/wp-includes/rest-api/class-wp-rest-server.php on line 566
-
