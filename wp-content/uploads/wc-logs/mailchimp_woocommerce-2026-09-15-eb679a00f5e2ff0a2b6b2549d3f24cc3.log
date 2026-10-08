@@ -1,0 +1,6 @@
+2026-09-15T13:16:26+00:00 NOTICE action_scheduler.queue_job :: MailChimp_WooCommerce_User_Submit queued :: obj_id 1
+2026-09-15T13:17:12+00:00 ERROR api.list :: Error retrieving list for double_optin check
+2026-09-15T13:17:13+00:00 ERROR member.sync :: admin@transijen.com :: Error Code 401 :: API Key InvalidYour API key may be invalid, or you've attempted to access the wrong datacenter. on 2389 in /Users/vidakomaria/www/transijen_wordpress/public_html/wp-content/plugins/mailchimp-for-woocommerce/includes/api/class-mailchimp-api.php
+2026-09-15T13:18:45+00:00 NOTICE action_scheduler.queue_job :: MailChimp_WooCommerce_User_Submit queued :: obj_id 1
+2026-09-15T13:19:19+00:00 ERROR api.list :: Error retrieving list for double_optin check
+2026-09-15T13:19:19+00:00 ERROR member.sync :: admin@transijen.com :: Error Code 401 :: API Key InvalidYour API key may be invalid, or you've attempted to access the wrong datacenter. on 2389 in /Users/vidakomaria/www/transijen_wordpress/public_html/wp-content/plugins/mailchimp-for-woocommerce/includes/api/class-mailchimp-api.php
