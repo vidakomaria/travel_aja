@@ -4,10 +4,21 @@
 
 Katalog perjalanan dwibahasa untuk destinasi, paket wisata, dan sewa kendaraan di Indonesia. Pengunjung dapat mencari, memfilter, dan mengurutkan katalog, lalu menghubungi tim melalui WhatsApp.
 
+## Tampilan desktop dan mobile
+
+**Beranda — desktop**
+
+<p align="center"><img src="docs/screenshots/01-homepage.jpg" width="100%" alt="Beranda Travel Aja pada layar desktop" /></p>
+
+**Beranda — mobile**
+
+<p align="center"><img src="docs/screenshots/04-homepage-mobile.jpg" width="390" alt="Beranda Travel Aja pada layar mobile" /></p>
+
+**Katalog — desktop**
+
 <p align="center">
-  <img src="docs/screenshots/01-homepage.jpg" width="32%" alt="Beranda Travel Aja" />
-  <img src="docs/screenshots/02-tour-packages.jpg" width="32%" alt="Daftar paket wisata" />
-  <img src="docs/screenshots/03-vehicle-rental.jpg" width="32%" alt="Daftar sewa kendaraan" />
+  <img src="docs/screenshots/02-tour-packages.jpg" width="49%" alt="Katalog paket wisata pada layar desktop" />
+  <img src="docs/screenshots/03-vehicle-rental.jpg" width="49%" alt="Katalog kendaraan pada layar desktop" />
 </p>
 
 **Status:** Dalam pengembangan; disiapkan sebagai demo portofolio.
@@ -32,7 +43,7 @@ Setelah repo ini publik di GitHub, gunakan [Launch Travel Aja in WordPress Playg
 
 Blueprint mengikuti format resmi WordPress Playground: [Blueprints](https://developer.wordpress.org/playground/blueprints/) dan [Steps](https://developer.wordpress.org/playground/blueprints/steps/).
 
-Screenshot di atas diambil dari instalasi lokal yang sudah ada, bukan dari data WXR sintetis. Tidak terlihat nomor WhatsApp atau nama pribadi. Pada hasil impor, plugin menyediakan ilustrasi lokal sebagai gambar cadangan; teks dan itemnya mengikuti XML demo.
+Screenshot di atas diambil dari instalasi lokal berisi konten demo. Area yang ditampilkan tidak memuat nomor WhatsApp atau nama pribadi. Pada hasil impor, plugin menyediakan ilustrasi lokal sebagai gambar cadangan; teks dan itemnya mengikuti XML demo.
 
 ## Kebutuhan
 
@@ -79,6 +90,6 @@ Plugin mendaftarkan post type `destinasi`, `paket_wisata`, dan `transportasi`. T
 - `wp-content/themes/custom-theme-v2/` — child theme dengan beranda dan tampilan versi 2.
 - `demo-content/travel-aja-demo.xml` — data contoh sintetis; tidak berisi media atau data database lokal.
 - `blueprints/playground.json` — konfigurasi sekali klik untuk WordPress Playground.
-- `docs/screenshots/` — tiga screenshot antarmuka.
+- `docs/screenshots/` — screenshot beranda desktop dan mobile serta katalog paket dan kendaraan desktop.
 
 WordPress core, plugin pihak ketiga, database, unggahan, dan konfigurasi lokal tidak disertakan. `.gitignore` mengecualikan file konfigurasi, ekspor database, log, dan unggahan. Jangan commit kredensial atau data situs produksi.

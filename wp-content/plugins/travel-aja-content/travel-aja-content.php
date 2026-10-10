@@ -141,6 +141,13 @@ register_deactivation_hook( __FILE__, 'travel_aja_content_deactivate' );
  * @return void
  */
 function travel_aja_content_register_placeholder_media() {
+	// WordPress only loads the image helpers automatically in some admin flows.
+	// Playground activates plugins through PHP, so load the API before creating
+	// attachment metadata to avoid a fatal error during activation.
+	if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+	}
+
 	$assets = array(
 		'destination' => 'destination.png',
 		'package'     => 'package.png',
