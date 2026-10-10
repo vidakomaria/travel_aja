@@ -34,7 +34,8 @@
         "path": "wp-content/themes/custom-theme"
       },
       "options": {
-        "activate": false
+        "activate": false,
+        "targetFolderName": "custom-theme"
       }
     },
     {
@@ -47,7 +48,8 @@
         "path": "wp-content/themes/custom-theme-v2"
       },
       "options": {
-        "activate": true
+        "activate": true,
+        "targetFolderName": "custom-theme-v2"
       }
     },
     {
