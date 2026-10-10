@@ -9,7 +9,7 @@
 <?php wp_body_open(); ?>
 <a class="skip-link" href="#main-content"><?php esc_html_e( 'Lewati ke konten', 'custom-theme-v2' ); ?></a>
 
-<?php $contact_url = travel_aja_v2_page_url( 'kontak-kami', '/kontak-kami/' ); ?>
+<?php $contact_url = travel_aja_v2_page_url( 'tentang-kami', '/tentang-kami/' ); ?>
 <header class="v2-header" data-v2-header>
 	<div class="v2-shell v2-header__inner">
 		<a class="v2-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
@@ -40,6 +40,16 @@
 				);
 				?>
 			</nav>
+			<?php if ( function_exists( 'pll_the_languages' ) ) : ?>
+				<?php $v2_languages = pll_the_languages( array( 'raw' => 1, 'hide_if_no_translation' => 0, 'hide_current' => 0, 'show_flags' => 0, 'show_names' => 1 ) ); ?>
+				<?php if ( is_array( $v2_languages ) && count( $v2_languages ) > 1 ) : ?>
+					<div class="v2-lang" role="group" aria-label="<?php esc_attr_e( 'Pilih bahasa', 'custom-theme-v2' ); ?>">
+						<?php foreach ( $v2_languages as $v2_language ) : ?>
+							<a class="v2-lang__item<?php echo $v2_language['current_lang'] ? ' is-current' : ''; ?>" href="<?php echo esc_url( $v2_language['url'] ); ?>" hreflang="<?php echo esc_attr( $v2_language['locale'] ); ?>" lang="<?php echo esc_attr( $v2_language['locale'] ); ?>"<?php echo $v2_language['current_lang'] ? ' aria-current="true"' : ''; ?>><?php echo esc_html( strtoupper( $v2_language['slug'] ) ); ?></a>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			<?php endif; ?>
 			<a class="v2-button v2-button--small" href="<?php echo esc_url( $contact_url ); ?>"><?php esc_html_e( 'Hubungi Kami', 'custom-theme-v2' ); ?></a>
 		</div>
 	</div>

@@ -148,15 +148,20 @@ body:not(.home) .v2-header {
 }
 
 .v2-header__navigation {
-	gap: 30px;
+	gap: clamp(14px, 1.5vw, 24px);
+}
+
+.v2-nav {
+	flex: 0 0 auto;
 }
 
 .v2-nav__list,
 .v2-nav .menu {
-	gap: 26px;
+	gap: clamp(12px, 1.25vw, 22px);
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	flex-wrap: nowrap;
 }
 
 .v2-nav a {
@@ -165,6 +170,7 @@ body:not(.home) .v2-header {
 	font-size: 14px;
 	font-weight: 650;
 	text-decoration: none;
+	white-space: nowrap;
 }
 
 .v2-nav a::after {
@@ -210,6 +216,7 @@ body:not(.home) .v2-header {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	flex: 0 0 auto;
 	min-height: 50px;
 	padding: 12px 24px;
 	border: 1px solid var(--v2-terracotta);
@@ -220,6 +227,7 @@ body:not(.home) .v2-header {
 	font-size: 14px;
 	font-weight: 750;
 	text-decoration: none;
+	white-space: nowrap;
 	transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
@@ -244,6 +252,39 @@ body:not(.home) .v2-header {
 	border-color: #fff;
 	background: #fff;
 	color: var(--v2-forest) !important;
+}
+
+.v2-lang {
+	display: inline-flex;
+	align-items: center;
+	flex: 0 0 auto;
+	gap: 2px;
+	padding: 3px;
+	border: 1px solid currentColor;
+	border-radius: 999px;
+	font-size: 11px;
+	font-weight: 800;
+	letter-spacing: 0.06em;
+	line-height: 1;
+	opacity: 0.92;
+}
+
+.v2-lang__item {
+	padding: 5px 9px;
+	border-radius: 999px;
+	color: inherit !important;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background-color 180ms ease, color 180ms ease;
+}
+
+.v2-lang__item:hover {
+	background: rgba(199, 82, 45, 0.16);
+}
+
+.v2-lang__item.is-current {
+	background: var(--v2-terracotta);
+	color: #fff !important;
 }
 
 .v2-hero {
@@ -958,7 +999,9 @@ body.travel-aja-v2:not(.home) .contact-hero {
 	}
 }
 
-@media (max-width: 820px) {
+/* Label menu Indonesia + tombol bahasa + CTA tidak muat satu baris di bawah
+   1150px, jadi header memakai tombol hamburger lebih awal. */
+@media (max-width: 1150px) {
 	.admin-bar .v2-header {
 		top: 46px;
 	}
@@ -1024,7 +1067,12 @@ body.travel-aja-v2:not(.home) .contact-hero {
 		width: 100%;
 		margin-top: 16px;
 	}
+	.v2-header__navigation .v2-lang {
+		margin-top: 14px;
+	}
+}
 
+@media (max-width: 820px) {
 	.v2-hero {
 		min-height: 620px;
 	}

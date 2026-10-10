@@ -58,13 +58,13 @@ add_action( 'wp_enqueue_scripts', function () {
  if ( is_front_page() ) {
   wp_enqueue_script( 'custom-theme-home', get_theme_file_uri( 'assets/js/home.js' ), array(), (string) filemtime( get_theme_file_path( 'assets/js/home.js' ) ), true );
  }
- if ( is_page( 'kontak-kami' ) ) {
+ if ( is_page( 'tentang-kami' ) ) {
   wp_enqueue_script( 'custom-theme-contact', get_theme_file_uri( 'assets/js/contact.js' ), array(), (string) filemtime( get_theme_file_path( 'assets/js/contact.js' ) ), true );
  }
 } );
 
 add_filter( 'body_class', function ( $classes ) {
-	if ( is_home() || is_singular( array( 'post', 'paket_wisata', 'destinasi', 'transportasi' ) ) || is_post_type_archive( array( 'paket_wisata', 'destinasi', 'transportasi' ) ) || is_page( array( 'paket-wisata', 'destinasi', 'transportasi', 'panduan-wisata', 'tentang-kami', 'kontak-kami' ) ) ) {
+	if ( is_home() || is_singular( array( 'post', 'paket_wisata', 'destinasi', 'transportasi' ) ) || is_post_type_archive( array( 'paket_wisata', 'destinasi', 'transportasi' ) ) || is_page( array( 'paket-wisata', 'destinasi', 'transportasi', 'panduan-wisata', 'tentang-kami' ) ) ) {
 		$classes[] = 'has-overlay-header';
 	}
 	return $classes;

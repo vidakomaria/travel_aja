@@ -8,7 +8,7 @@ $hours    = trim( (string) get_theme_mod( 'travel_hours', '' ) );
 	<div class="v2-shell v2-footer__grid">
 		<div class="v2-footer__about">
 			<a class="v2-footer__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">TRAVEL AJA</a>
-			<p><?php echo esc_html( get_theme_mod( 'travel_footer_description', '' ) ?: 'Paket wisata dan kendaraan pilihan untuk perjalanan yang lebih praktis, nyaman, dan berkesan.' ); ?></p>
+			<p><?php echo esc_html( get_theme_mod( 'travel_footer_description', '' ) ?: __( 'Paket wisata dan kendaraan pilihan untuk perjalanan yang lebih praktis, nyaman, dan berkesan.', 'custom-theme-v2' ) ); ?></p>
 			<div class="v2-footer__socials">
 				<?php foreach ( array( 'facebook' => 'f', 'instagram' => '◎', 'tiktok' => '♪', 'youtube' => '▶' ) as $social => $symbol ) : ?>
 					<?php $url = get_theme_mod( 'travel_' . $social, '' ); ?>
@@ -31,7 +31,7 @@ $hours    = trim( (string) get_theme_mod( 'travel_hours', '' ) );
 			<?php if ( $email ) : ?><a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>"><span>Email</span><?php echo esc_html( antispambot( $email ) ); ?></a><?php endif; ?>
 			<?php if ( $address ) : ?><p><span><?php esc_html_e( 'Lokasi', 'custom-theme-v2' ); ?></span><?php echo esc_html( $address ); ?></p><?php endif; ?>
 			<?php if ( $hours ) : ?><p><span><?php esc_html_e( 'Jam layanan', 'custom-theme-v2' ); ?></span><?php echo esc_html( $hours ); ?></p><?php endif; ?>
-			<?php if ( ! $whatsapp && ! $email && ! $address ) : ?><p><?php esc_html_e( 'Untuk pertanyaan perjalanan, silakan kunjungi halaman Kontak Kami.', 'custom-theme-v2' ); ?> <a href="<?php echo esc_url( travel_aja_v2_page_url( 'kontak-kami', '/kontak-kami/' ) ); ?>"><?php esc_html_e( 'Lihat kontak', 'custom-theme-v2' ); ?> →</a></p><?php endif; ?>
+			<?php if ( ! $whatsapp && ! $email && ! $address ) : ?><p><?php esc_html_e( 'Untuk pertanyaan perjalanan, silakan kunjungi halaman Kontak Kami.', 'custom-theme-v2' ); ?> <a href="<?php echo esc_url( travel_aja_v2_page_url( 'tentang-kami', '/tentang-kami/' ) ); ?>"><?php esc_html_e( 'Lihat kontak', 'custom-theme-v2' ); ?> →</a></p><?php endif; ?>
 		</div>
 	</div>
 	<div class="v2-shell v2-footer__bottom">

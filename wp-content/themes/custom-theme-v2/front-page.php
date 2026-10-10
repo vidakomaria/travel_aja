@@ -12,7 +12,7 @@ $hero_image     = $front_id && has_post_thumbnail( $front_id ) ? get_the_post_th
 $package_url    = custom_theme_listing_url( 'paket_wisata' );
 $transport_url  = custom_theme_listing_url( 'transportasi' );
 $guide_url      = travel_aja_v2_page_url( 'panduan-wisata', '/panduan-wisata/' );
-$contact_url    = travel_aja_v2_page_url( 'kontak-kami', '/kontak-kami/' );
+$contact_url    = travel_aja_v2_page_url( 'tentang-kami', '/tentang-kami/' );
 $hero_kicker    = get_theme_mod( 'travel_v2_hero_kicker', 'Paket wisata dan sewa kendaraan di Indonesia' );
 $hero_title     = get_theme_mod( 'travel_v2_hero_title', 'Jelajahi Indonesia dengan lebih mudah' );
 $hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket perjalanan pilihan dan kendaraan yang siap menemani rute liburan Anda.' );
@@ -136,10 +136,10 @@ $hero_desc      = get_theme_mod( 'travel_v2_hero_description', 'Temukan paket pe
 				<a href="<?php echo esc_url( $guide_url ); ?>"><?php esc_html_e( 'Lihat semua artikel', 'custom-theme-v2' ); ?> <span>→</span></a>
 			</header>
 			<?php
+			// Artikel terbaru; Polylang otomatis membatasi hasil ke bahasa yang sedang aktif.
 			$articles = new WP_Query(
 				array(
 					'post_type'           => 'post',
-					'post__in'            => array( 190, 195, 197, 199 ),
 					'post_status'         => 'publish',
 					'posts_per_page'      => 3,
 					'ignore_sticky_posts' => true,
