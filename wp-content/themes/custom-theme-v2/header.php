@@ -9,7 +9,10 @@
 <?php wp_body_open(); ?>
 <a class="skip-link" href="#main-content"><?php esc_html_e( 'Lewati ke konten', 'custom-theme-v2' ); ?></a>
 
-<?php $contact_url = travel_aja_v2_page_url( 'tentang-kami', '/tentang-kami/' ); ?>
+<?php
+$contact_url = travel_aja_v2_page_url( 'tentang-kami', '/tentang-kami/' );
+$contact_url = trailingslashit( $contact_url ) . ( function_exists( 'pll_current_language' ) && 'en' === pll_current_language() ? '#contact' : '#kontak' );
+?>
 <header class="v2-header" data-v2-header>
 	<div class="v2-shell v2-header__inner">
 		<a class="v2-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">

@@ -34,13 +34,85 @@ function custom_theme_listing_config( $post_type ) {
 			'cta_text'    => 'Diskusikan kebutuhan kendaraan Anda bersama Travel Aja dan pilih opsi transportasi yang paling sesuai.',
 		),
 	);
-	return isset( $configs[ $post_type ] ) ? $configs[ $post_type ] : $configs['paket_wisata'];
+	$config = isset( $configs[ $post_type ] ) ? $configs[ $post_type ] : $configs['paket_wisata'];
+	if ( function_exists( 'pll_current_language' ) && 'en' === pll_current_language() ) {
+		$english = array(
+			'paket_wisata' => array(
+				'label' => 'Tour Packages in Indonesia',
+				'title' => 'Find Your Indonesia Tour Package',
+				'description' => 'Explore destinations across Indonesia with trips planned around your time, interests, and travel style.',
+				'placeholder' => 'Search tour packages or destinations...',
+				'count' => 'tour packages',
+				'cta_title' => 'Have your own plans?',
+				'cta_text' => 'Tell Travel Aja what you need and we will help find a trip that suits you.',
+			),
+			'destinasi' => array(
+				'label' => 'Explore Destinations',
+				'title' => 'Explore Destinations in Indonesia',
+				'description' => 'Discover mountains, craters, beaches, islands, forests, culture, and outdoor experiences across Indonesia.',
+				'placeholder' => 'Search destinations...',
+				'count' => 'destinations',
+				'cta_title' => 'Found a destination you like?',
+				'cta_text' => 'Plan your trip with Travel Aja. We can help tailor it to your time, interests, and needs.',
+			),
+			'transportasi' => array(
+				'label' => 'Travel Transport',
+				'title' => 'Rent a Vehicle to Explore Indonesia',
+				'description' => 'Browse motorbikes, cars, and driver services for your journey across Indonesia.',
+				'placeholder' => 'Search vehicles or transport types...',
+				'count' => 'transport options',
+				'cta_title' => 'Need transport for your trip?',
+				'cta_text' => 'Talk to Travel Aja about your vehicle needs and choose the right option for your trip.',
+			),
+		);
+		$config = array_merge( $config, $english[ $post_type ] ?? $english['paket_wisata'] );
+	}
+	return $config;
+}
+
+/** Translate the hard-coded labels in the shared listing template. */
+function custom_theme_listing_text( $text ) {
+	if ( ! function_exists( 'pll_current_language' ) || 'en' !== pll_current_language() ) {
+		return $text;
+	}
+	$translations = array(
+		'Durasi Perjalanan' => 'Trip Duration', 'Kategori' => 'Category', 'Jenis Transportasi' => 'Vehicle Type',
+		'Rentang Harga' => 'Price Range', 'Di bawah Rp 250rb' => 'Under Rp 250K', 'Rp 250rb – Rp 500rb' => 'Rp 250K – Rp 500K',
+		'Rp 500rb – Rp 1 Juta' => 'Rp 500K – Rp 1M', 'Di atas Rp 1 Juta' => 'Over Rp 1M',
+		'Terapkan Filter' => 'Apply Filters', 'Reset Filter' => 'Reset Filters', 'Cari' => 'Search',
+		'Menampilkan' => 'Showing', 'Urutkan:' => 'Sort by:', 'Terbaru' => 'Newest', 'Nama A–Z' => 'Name A–Z',
+		'Harga Terendah' => 'Lowest Price', 'Harga Tertinggi' => 'Highest Price', 'Konten belum ditemukan' => 'No results found',
+		'Coba kata kunci atau filter lain. Konten baru dapat ditambahkan dari wp-admin.' => 'Try another search term or filter. New content can be added in the admin area.',
+		'Navigasi halaman' => 'Page navigation', '◉ Hubungi via WhatsApp' => '◉ Contact us on WhatsApp',
+		'Hubungi Kami' => 'Contact Us', 'Durasi fleksibel' => 'Flexible duration', 'Mulai dari' => 'Starting from',
+		'Lihat Detail' => 'View Details', 'Lihat Destinasi' => 'View Destination', 'Harga Sewa' => 'Rental Price',
+		'Hubungi kami' => 'Contact us', 'Kapasitas fleksibel' => 'Flexible capacity', 'Sesuai pilihan' => 'As selected',
+		'Sewa Motor' => 'Motorbike Rental', 'Sewa Mobil' => 'Car Rental', 'Mobil + Driver' => 'Car + Driver',
+		'Air Terjun' => 'Waterfalls', 'Budaya' => 'Culture', 'Gunung & Kawah' => 'Mountains & Craters',
+		'Hutan & Alam' => 'Forests & Nature', 'Pantai' => 'Beaches', 'Petualangan' => 'Adventure', 'Pulau' => 'Islands', 'Sejarah' => 'History',
+		'Gunung Bromo' => 'Mount Bromo',
+	);
+	return isset( $translations[ $text ] ) ? $translations[ $text ] : $text;
 }
 
 function custom_theme_listing_url( $post_type ) {
 	$config = custom_theme_listing_config( $post_type );
 	$page   = get_page_by_path( $config['slug'] );
 	if ( $page instanceof WP_Post && 'publish' === $page->post_status ) {
+		if ( function_exists( 'pll_current_language' ) && function_exists( 'pll_get_post' ) ) {
+			$language = pll_current_language();
+			if ( $language && $language !== pll_default_language() ) {
+				$translated_id = (int) pll_get_post( $page->ID, $language );
+				if ( $translated_id ) {
+					return get_permalink( $translated_id );
+				}
+
+				// Keep navigation in the selected language while this listing page
+				// is waiting for its Polylang translation.
+				$archive = get_post_type_archive_link( $post_type );
+				return $archive ? $archive : pll_home_url( $language );
+			}
+		}
 		return get_permalink( $page );
 	}
 	$archive = get_post_type_archive_link( $post_type );
@@ -90,6 +162,12 @@ function custom_theme_guide_display_categories( $categories ) {
 
 function custom_theme_listing_hero_image() {
 	$front_id = (int) get_option( 'page_on_front' );
+	if ( $front_id && function_exists( 'pll_get_post' ) ) {
+		$translated_id = (int) pll_get_post( $front_id );
+		if ( $translated_id ) {
+			$front_id = $translated_id;
+		}
+	}
 	return $front_id && has_post_thumbnail( $front_id ) ? get_the_post_thumbnail_url( $front_id, 'full' ) : '';
 }
 
@@ -177,22 +255,22 @@ function custom_theme_render_listing_card( $post_type ) {
 				$rating   = get_post_meta( $post_id, '_custom_theme_package_rating', true );
 				$duration = get_post_meta( $post_id, '_custom_theme_package_duration', true );
 				$price    = get_post_meta( $post_id, '_custom_theme_package_price', true ); ?>
-				<?php if ( $location ) : ?><span class="listing-card__eyebrow">● <?php echo esc_html( $location ); ?></span><?php endif; ?>
+				<?php if ( $location ) : ?><span class="listing-card__eyebrow">● <?php echo esc_html( custom_theme_listing_text( $location ) ); ?></span><?php endif; ?>
 				<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 				<?php if ( $rating ) : ?><div class="listing-card__rating">★ <?php echo esc_html( number_format( (float) $rating, 1 ) ); ?></div><?php endif; ?>
-				<div class="listing-card__facts"><span>◷ <?php echo esc_html( $duration ?: 'Durasi fleksibel' ); ?></span><span>● <?php echo esc_html( $location ?: 'Indonesia' ); ?></span></div>
-				<div class="listing-card__footer"><span><small>Mulai dari</small><strong><?php echo $price ? esc_html( 'Rp ' . number_format_i18n( (float) $price ) ) : 'Hubungi Kami'; ?></strong><?php if ( $price ) : ?><small>/pax</small><?php endif; ?></span><a href="<?php the_permalink(); ?>">Lihat Detail</a></div>
+				<div class="listing-card__facts"><span>◷ <?php echo esc_html( custom_theme_listing_text( $duration ?: 'Durasi fleksibel' ) ); ?></span><span>● <?php echo esc_html( custom_theme_listing_text( $location ?: 'Indonesia' ) ); ?></span></div>
+				<div class="listing-card__footer"><span><small><?php echo esc_html( custom_theme_listing_text( 'Mulai dari' ) ); ?></small><strong><?php echo $price ? esc_html( 'Rp ' . number_format_i18n( (float) $price ) ) : esc_html( custom_theme_listing_text( 'Hubungi Kami' ) ); ?></strong><?php if ( $price ) : ?><small>/pax</small><?php endif; ?></span><a href="<?php the_permalink(); ?>"><?php echo esc_html( custom_theme_listing_text( 'Lihat Detail' ) ); ?></a></div>
 			<?php elseif ( 'destinasi' === $post_type ) :
 				$location   = get_post_meta( $post_id, '_custom_theme_destination_location', true );
 				$rating     = get_post_meta( $post_id, '_custom_theme_destination_rating', true );
 				$category   = get_post_meta( $post_id, '_custom_theme_destination_category', true );
 				$highlights = array_filter( array_map( 'trim', explode( ',', (string) get_post_meta( $post_id, '_custom_theme_destination_highlights', true ) ) ) ); ?>
-				<div class="listing-card__meta"><span class="listing-card__eyebrow">● <?php echo esc_html( $location ?: 'Indonesia' ); ?></span><?php if ( $category ) : ?><span><?php echo esc_html( $category ); ?></span><?php endif; ?></div>
+				<div class="listing-card__meta"><span class="listing-card__eyebrow">● <?php echo esc_html( custom_theme_listing_text( $location ?: 'Indonesia' ) ); ?></span><?php if ( $category ) : ?><span><?php echo esc_html( custom_theme_listing_text( $category ) ); ?></span><?php endif; ?></div>
 				<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 				<?php if ( $rating ) : ?><div class="listing-card__rating">★ <?php echo esc_html( number_format( (float) $rating, 1 ) ); ?></div><?php endif; ?>
 				<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 16 ) ); ?></p>
 				<?php if ( $highlights ) : ?><div class="listing-card__highlights"><?php foreach ( array_slice( $highlights, 0, 3 ) as $item ) : ?><span>✦ <?php echo esc_html( $item ); ?></span><?php endforeach; ?></div><?php endif; ?>
-				<a class="listing-card__wide-button" href="<?php the_permalink(); ?>">Lihat Destinasi</a>
+				<a class="listing-card__wide-button" href="<?php the_permalink(); ?>"><?php echo esc_html( custom_theme_listing_text( 'Lihat Destinasi' ) ); ?></a>
 			<?php else :
 				$type         = get_post_meta( $post_id, '_custom_theme_transport_type', true );
 				$capacity     = get_post_meta( $post_id, '_custom_theme_transport_capacity', true );
@@ -203,7 +281,7 @@ function custom_theme_render_listing_card( $post_type ) {
 				<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 				<div class="listing-card__facts"><span>♟ <?php echo esc_html( $capacity ?: 'Kapasitas fleksibel' ); ?></span><span>⚙ <?php echo esc_html( $transmission ?: 'Sesuai pilihan' ); ?></span><?php if ( $model ) : ?><span>▰ <?php echo esc_html( $model ); ?></span><?php endif; ?></div>
 				<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 13 ) ); ?></p>
-				<div class="listing-card__footer"><span><small>Harga Sewa</small><strong><?php echo $price ? esc_html( 'Rp ' . number_format_i18n( (float) $price ) ) : 'Hubungi Kami'; ?></strong><?php if ( $price && $unit ) : ?><small>/<?php echo esc_html( $unit ); ?></small><?php endif; ?></span><a href="<?php the_permalink(); ?>">Lihat Detail</a></div>
+				<div class="listing-card__footer"><span><small><?php echo esc_html( custom_theme_listing_text( 'Harga Sewa' ) ); ?></small><strong><?php echo $price ? esc_html( 'Rp ' . number_format_i18n( (float) $price ) ) : esc_html( custom_theme_listing_text( 'Hubungi Kami' ) ); ?></strong><?php if ( $price && $unit ) : ?><small>/<?php echo esc_html( $unit ); ?></small><?php endif; ?></span><a href="<?php the_permalink(); ?>"><?php echo esc_html( custom_theme_listing_text( 'Lihat Detail' ) ); ?></a></div>
 			<?php endif; ?>
 		</div>
 	</article>
@@ -218,17 +296,24 @@ function custom_theme_render_listing_sidebar( $post_type ) {
 	);
 	$active_type   = custom_theme_request_value( 'travel_type' );
 	$active_budget = custom_theme_request_value( 'travel_budget' );
+	if ( function_exists( 'pll_current_language' ) && 'en' === pll_current_language() ) {
+		$type_options = array(
+			'paket_wisata' => array( '1 Day', '2 Days 1 Night', '3 Days 2 Nights', '4 Days 3 Nights' ),
+			'destinasi'    => array( 'Waterfalls', 'Culture', 'Mountains', 'Forests', 'Beaches', 'Adventure', 'Islands', 'History' ),
+			'transportasi' => array( 'Motorbike Rental', 'Car Rental with Driver', 'Van Rental with Driver' ),
+		);
+	}
 	?>
 	<form class="listing-filter" method="get" action="<?php echo esc_url( custom_theme_listing_url( $post_type ) ); ?>">
 		<?php if ( custom_theme_request_value( 'travel_q' ) ) : ?><input type="hidden" name="travel_q" value="<?php echo esc_attr( custom_theme_request_value( 'travel_q' ) ); ?>"><?php endif; ?>
-		<fieldset><legend><?php echo 'paket_wisata' === $post_type ? 'Durasi Perjalanan' : ( 'destinasi' === $post_type ? 'Kategori' : 'Jenis Transportasi' ); ?></legend>
-			<?php foreach ( $type_options[ $post_type ] as $option ) : ?><label><input type="radio" name="travel_type" value="<?php echo esc_attr( $option ); ?>" <?php checked( $active_type, $option ); ?>> <?php echo esc_html( $option ); ?></label><?php endforeach; ?>
+		<fieldset><legend><?php echo esc_html( custom_theme_listing_text( 'paket_wisata' === $post_type ? 'Durasi Perjalanan' : ( 'destinasi' === $post_type ? 'Kategori' : 'Jenis Transportasi' ) ) ); ?></legend>
+			<?php foreach ( $type_options[ $post_type ] as $option ) : ?><label><input type="radio" name="travel_type" value="<?php echo esc_attr( custom_theme_listing_text( $option ) ); ?>" <?php checked( $active_type, custom_theme_listing_text( $option ) ); ?>> <?php echo esc_html( custom_theme_listing_text( $option ) ); ?></label><?php endforeach; ?>
 		</fieldset>
-		<?php if ( 'destinasi' !== $post_type ) : ?><fieldset><legend>Rentang Harga</legend>
-			<?php foreach ( array( 'under-250' => 'Di bawah Rp 250rb', '250-500' => 'Rp 250rb – Rp 500rb', '500-1000' => 'Rp 500rb – Rp 1 Juta', 'above-1000' => 'Di atas Rp 1 Juta' ) as $value => $label ) : ?><label><input type="radio" name="travel_budget" value="<?php echo esc_attr( $value ); ?>" <?php checked( $active_budget, $value ); ?>> <?php echo esc_html( $label ); ?></label><?php endforeach; ?>
+		<?php if ( 'destinasi' !== $post_type ) : ?><fieldset><legend><?php echo esc_html( custom_theme_listing_text( 'Rentang Harga' ) ); ?></legend>
+			<?php foreach ( array( 'under-250' => 'Di bawah Rp 250rb', '250-500' => 'Rp 250rb – Rp 500rb', '500-1000' => 'Rp 500rb – Rp 1 Juta', 'above-1000' => 'Di atas Rp 1 Juta' ) as $value => $label ) : ?><label><input type="radio" name="travel_budget" value="<?php echo esc_attr( $value ); ?>" <?php checked( $active_budget, $value ); ?>> <?php echo esc_html( custom_theme_listing_text( $label ) ); ?></label><?php endforeach; ?>
 		</fieldset><?php endif; ?>
-		<button type="submit">Terapkan Filter</button>
-		<a href="<?php echo esc_url( custom_theme_listing_url( $post_type ) ); ?>">Reset Filter</a>
+		<button type="submit"><?php echo esc_html( custom_theme_listing_text( 'Terapkan Filter' ) ); ?></button>
+		<a href="<?php echo esc_url( custom_theme_listing_url( $post_type ) ); ?>"><?php echo esc_html( custom_theme_listing_text( 'Reset Filter' ) ); ?></a>
 	</form>
 	<?php
 }
@@ -243,16 +328,16 @@ function custom_theme_render_listing_page( $post_type ) {
 	<main id="main-content" class="listing-page">
 		<section class="travel-page-hero"<?php if ( $hero_image ) : ?> style="--travel-hero-image:url('<?php echo esc_url( $hero_image ); ?>')"<?php endif; ?>>
 			<div class="container travel-page-hero__inner"><span><?php echo esc_html( $config['label'] ); ?></span><h1><?php echo esc_html( $config['title'] ); ?></h1><p><?php echo esc_html( $config['description'] ); ?></p>
-				<form class="travel-page-search" method="get" action="<?php echo esc_url( custom_theme_listing_url( $post_type ) ); ?>"><input type="search" name="travel_q" value="<?php echo esc_attr( custom_theme_request_value( 'travel_q' ) ); ?>" placeholder="<?php echo esc_attr( $config['placeholder'] ); ?>"><button type="submit">Cari</button></form>
+				<form class="travel-page-search" method="get" action="<?php echo esc_url( custom_theme_listing_url( $post_type ) ); ?>"><input type="search" name="travel_q" value="<?php echo esc_attr( custom_theme_request_value( 'travel_q' ) ); ?>" placeholder="<?php echo esc_attr( $config['placeholder'] ); ?>"><button type="submit"><?php echo esc_html( custom_theme_listing_text( 'Cari' ) ); ?></button></form>
 			</div>
 		</section>
 		<section class="listing-results"><div class="container listing-layout">
 			<aside><?php custom_theme_render_listing_sidebar( $post_type ); ?></aside>
 			<div class="listing-main">
-				<div class="listing-toolbar"><p>Menampilkan <strong><?php echo esc_html( (string) $query->found_posts ); ?> <?php echo esc_html( $config['count'] ); ?></strong></p><form method="get" action="<?php echo esc_url( custom_theme_listing_url( $post_type ) ); ?>"><?php foreach ( array( 'travel_q', 'travel_type', 'travel_budget' ) as $key ) : if ( custom_theme_request_value( $key ) ) : ?><input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( custom_theme_request_value( $key ) ); ?>"><?php endif; endforeach; ?><label>Urutkan: <select name="travel_sort" onchange="this.form.submit()"><option value="latest" <?php selected( custom_theme_request_value( 'travel_sort', 'latest' ), 'latest' ); ?>>Terbaru</option><option value="title" <?php selected( custom_theme_request_value( 'travel_sort' ), 'title' ); ?>>Nama A–Z</option><?php if ( 'destinasi' !== $post_type ) : ?><option value="price_low" <?php selected( custom_theme_request_value( 'travel_sort' ), 'price_low' ); ?>>Harga Terendah</option><option value="price_high" <?php selected( custom_theme_request_value( 'travel_sort' ), 'price_high' ); ?>>Harga Tertinggi</option><?php endif; ?></select></label></form></div>
-				<?php if ( $query->have_posts() ) : ?><div class="listing-grid"><?php while ( $query->have_posts() ) : $query->the_post(); custom_theme_render_listing_card( $post_type ); endwhile; ?></div><?php else : ?><div class="listing-empty"><h2>Konten belum ditemukan</h2><p>Coba kata kunci atau filter lain. Konten baru dapat ditambahkan dari wp-admin.</p></div><?php endif; ?>
-				<?php if ( $query->max_num_pages > 1 ) : ?><nav class="listing-pagination" aria-label="Navigasi halaman"><?php echo wp_kses_post( paginate_links( array( 'total' => $query->max_num_pages, 'current' => max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) ) ) ) ); ?></nav><?php endif; wp_reset_postdata(); ?>
-				<div class="listing-cta"><div><h2><?php echo esc_html( $config['cta_title'] ); ?></h2><p><?php echo esc_html( $config['cta_text'] ); ?></p></div><?php if ( $whatsapp ) : ?><a href="<?php echo esc_url( 'https://wa.me/' . $whatsapp ); ?>" target="_blank" rel="noopener noreferrer">◉ Hubungi via WhatsApp</a><?php else : ?><a href="<?php echo esc_url( home_url( '/tentang-kami/' ) ); ?>">Hubungi Kami</a><?php endif; ?></div>
+				<div class="listing-toolbar"><p><?php echo esc_html( custom_theme_listing_text( 'Menampilkan' ) ); ?> <strong><?php echo esc_html( (string) $query->found_posts ); ?> <?php echo esc_html( $config['count'] ); ?></strong></p><form method="get" action="<?php echo esc_url( custom_theme_listing_url( $post_type ) ); ?>"><?php foreach ( array( 'travel_q', 'travel_type', 'travel_budget' ) as $key ) : if ( custom_theme_request_value( $key ) ) : ?><input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( custom_theme_request_value( $key ) ); ?>"><?php endif; endforeach; ?><label><?php echo esc_html( custom_theme_listing_text( 'Urutkan:' ) ); ?> <select name="travel_sort" onchange="this.form.submit()"><option value="latest" <?php selected( custom_theme_request_value( 'travel_sort', 'latest' ), 'latest' ); ?>><?php echo esc_html( custom_theme_listing_text( 'Terbaru' ) ); ?></option><option value="title" <?php selected( custom_theme_request_value( 'travel_sort' ), 'title' ); ?>><?php echo esc_html( custom_theme_listing_text( 'Nama A–Z' ) ); ?></option><?php if ( 'destinasi' !== $post_type ) : ?><option value="price_low" <?php selected( custom_theme_request_value( 'travel_sort' ), 'price_low' ); ?>><?php echo esc_html( custom_theme_listing_text( 'Harga Terendah' ) ); ?></option><option value="price_high" <?php selected( custom_theme_request_value( 'travel_sort' ), 'price_high' ); ?>><?php echo esc_html( custom_theme_listing_text( 'Harga Tertinggi' ) ); ?></option><?php endif; ?></select></label></form></div>
+				<?php if ( $query->have_posts() ) : ?><div class="listing-grid"><?php while ( $query->have_posts() ) : $query->the_post(); custom_theme_render_listing_card( $post_type ); endwhile; ?></div><?php else : ?><div class="listing-empty"><h2><?php echo esc_html( custom_theme_listing_text( 'Konten belum ditemukan' ) ); ?></h2><p><?php echo esc_html( custom_theme_listing_text( 'Coba kata kunci atau filter lain. Konten baru dapat ditambahkan dari wp-admin.' ) ); ?></p></div><?php endif; ?>
+				<?php if ( $query->max_num_pages > 1 ) : ?><nav class="listing-pagination" aria-label="<?php echo esc_attr( custom_theme_listing_text( 'Navigasi halaman' ) ); ?>"><?php echo wp_kses_post( paginate_links( array( 'total' => $query->max_num_pages, 'current' => max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) ) ) ) ); ?></nav><?php endif; wp_reset_postdata(); ?>
+				<div class="listing-cta"><div><h2><?php echo esc_html( $config['cta_title'] ); ?></h2><p><?php echo esc_html( $config['cta_text'] ); ?></p></div><?php if ( $whatsapp ) : ?><a href="<?php echo esc_url( 'https://wa.me/' . $whatsapp ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( custom_theme_listing_text( '◉ Hubungi via WhatsApp' ) ); ?></a><?php else : ?><a href="<?php echo esc_url( function_exists( 'travel_aja_v2_page_url' ) ? travel_aja_v2_page_url( 'tentang-kami', '/tentang-kami/' ) : home_url( '/tentang-kami/' ) ); ?>"><?php echo esc_html( custom_theme_listing_text( 'Hubungi Kami' ) ); ?></a><?php endif; ?></div>
 			</div>
 		</div></section>
 	</main>

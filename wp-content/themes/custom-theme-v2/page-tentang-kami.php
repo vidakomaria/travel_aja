@@ -126,8 +126,8 @@ get_header();
 					<span class="tl__badge">Kontak</span>
 					<h2>Hubungi Travel Aja</h2>
 					<p>Punya pertanyaan mengenai destinasi, paket wisata, atau ingin menyusun itinerary khusus? Tim Travel Aja siap membantu merencanakan perjalanan yang sesuai dengan kebutuhan Anda.</p>
-					<div class="contact-layout">
-						<aside class="contact-panel">
+					<div class="contact-layout contact-layout--about">
+						<aside class="contact-panel contact-panel--details">
 							<div class="contact-info">
 								<?php if ( $address ) : ?>
 									<div class="contact-item"><small>Alamat Kantor</small><strong><?php echo esc_html( $address ); ?></strong></div>
@@ -151,10 +151,11 @@ get_header();
 								<div class="contact-item"><small>Jam Operasional</small><strong><?php echo esc_html( $hours ); ?></strong></div>
 							</div>
 						</aside>
-						<div class="contact-panel">
+						<div class="contact-panel contact-panel--form">
 							<form id="contact-trip-form" class="contact-form contact-form-grid" data-whatsapp="<?php echo esc_attr( $whatsapp ); ?>">
-								<label><span>Nama</span><input type="text" name="name" required placeholder="Nama Anda"></label><label><span>Jumlah Orang</span><select name="people" required><option value="">Pilih Jumlah Orang...</option><option>1 Orang</option><option>2 Orang</option><option>3–5 Orang</option><option>6–10 Orang</option><option>Lebih dari 10 Orang</option></select></label>
-								<label><span>Estimasi Budget per Orang</span><select name="budget" required><option value="">Pilih Estimasi Budget...</option><option>Di bawah Rp 500.000</option><option>Rp 500.000 – Rp 1.000.000</option><option>Rp 1.000.000 – Rp 2.000.000</option><option>Di atas Rp 2.000.000</option></select></label><label><span>Perkiraan Tanggal Keberangkatan</span><input type="date" name="date" required></label>
+								<p class="contact-form-note">Isi detail yang sudah Anda ketahui. Semua kolom opsional.</p>
+								<label><span>Nama</span><input type="text" name="name" placeholder="Nama Anda"></label><label><span>Jumlah Orang</span><select name="people"><option value="">Pilih Jumlah Orang...</option><option>1 Orang</option><option>2 Orang</option><option>3–5 Orang</option><option>6–10 Orang</option><option>Lebih dari 10 Orang</option></select></label>
+								<label><span>Estimasi Budget per Orang</span><select name="budget"><option value="">Pilih Estimasi Budget...</option><option>Di bawah Rp 500.000</option><option>Rp 500.000 – Rp 1.000.000</option><option>Rp 1.000.000 – Rp 2.000.000</option><option>Di atas Rp 2.000.000</option></select></label><label><span>Perkiraan Tanggal Keberangkatan</span><input type="date" name="date"></label>
 								<label class="full"><span>Minat Destinasi & Kategori Wisata</span><input type="text" name="interest" placeholder="Contoh: pantai, alam, budaya, kuliner"></label><label class="full"><span>Catatan Perjalanan</span><textarea name="notes" rows="4" placeholder="Ceritakan kebutuhan atau rencana perjalanan Anda"></textarea></label>
 								<button type="submit">◉ Kirim ke WhatsApp</button>
 							</form>

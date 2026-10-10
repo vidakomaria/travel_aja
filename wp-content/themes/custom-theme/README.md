@@ -31,6 +31,12 @@ Untuk Transportasi, isi Featured Image lalu kotak **Detail Kartu Transportasi**:
 
 Isi nomor WhatsApp, alamat kantor, email, jam operasional, Google Maps, deskripsi footer, media sosial, dan logo melalui **Appearance → Customize**. Nomor WhatsApp harus memakai kode negara, misalnya `62812...`.
 
-Kolom pencarian di Beranda memakai parameter `s` bawaan WordPress. Hasilnya ditampilkan melalui `index.php`; tipe konten khusus akan ikut dicari jika pengaturan CPT UI tidak mengecualikannya dari pencarian.
+Kolom pencarian di Beranda memakai parameter `s` bawaan WordPress. Hasilnya ditampilkan melalui `index.php`; plugin konten mengatur ketiga post type agar ikut dicari.
 
 Halaman daftar membaca data langsung dari wp-admin. Pencarian, filter, urutan, dan pagination berjalan melalui parameter URL sehingga hasilnya dapat dibagikan atau dibuka kembali.
+
+## Plugin dan data demo
+
+Plugin **Travel Aja Content Types** di repository mendaftarkan post type `destinasi`, `paket_wisata`, dan `transportasi`; aktifkan plugin itu agar daftar dan detail konten berfungsi. Polylang dipakai oleh child theme untuk navigasi bilingual, tetapi tidak diperlukan untuk situs satu bahasa. WP Travel Engine bukan dependensi template ini.
+
+Untuk setup lengkap dan ekspor konten sintetis, ikuti langkah di README root repository dan impor `demo-content/travel-aja-demo.xml` melalui WordPress Importer.

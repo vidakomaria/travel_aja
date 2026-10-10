@@ -57,10 +57,13 @@ while ( have_posts() ) :
 	$dt_specs = array_filter( $dt_specs, static function ( $value ) {
 		return '' !== trim( (string) $value );
 	} );
-	$dt_facts = array_filter( array_map( 'strval', $dt_facts ) );
+	$dt_facts = array_filter( array_map( 'travel_aja_v2_ui_text', array_map( 'strval', $dt_facts ) ) );
 
 	$dt_wa       = preg_replace( '/\D/', '', (string) get_theme_mod( 'travel_whatsapp', '' ) );
-	$dt_wa_text  = rawurlencode( sprintf( 'Halo, saya ingin bertanya tentang %s.', get_the_title() ) );
+	$dt_wa_message = 'en' === ( function_exists( 'pll_current_language' ) ? pll_current_language() : 'id' )
+		? sprintf( 'Hello, I would like to ask about %s.', get_the_title() )
+		: sprintf( 'Halo, saya ingin bertanya tentang %s.', get_the_title() );
+	$dt_wa_text  = rawurlencode( $dt_wa_message );
 	$dt_wa_href  = $dt_wa ? 'https://wa.me/' . $dt_wa . '?text=' . $dt_wa_text : '';
 
 	$dt_prev = get_previous_post();
@@ -112,8 +115,8 @@ while ( have_posts() ) :
 							<dl class="dt-specs">
 								<?php foreach ( $dt_specs as $dt_key => $dt_value ) : ?>
 									<div>
-										<dt><?php echo esc_html( $dt_key ); ?></dt>
-										<dd><?php echo esc_html( $dt_value ); ?></dd>
+										<dt><?php echo esc_html( travel_aja_v2_ui_text( $dt_key ) ); ?></dt>
+									<dd><?php echo esc_html( travel_aja_v2_ui_text( $dt_value ) ); ?></dd>
 									</div>
 								<?php endforeach; ?>
 							</dl>

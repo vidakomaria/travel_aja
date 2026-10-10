@@ -13,3 +13,9 @@ Child theme yang mengubah beranda dan tampilan Travel Aja. Tema ini menggunakan 
 - Teks hero: **Appearance → Customize → Beranda Custom Theme 2**.
 
 Aktifkan melalui **Appearance → Themes → Custom Theme 2**.
+
+## Dependensi dan setup demo
+
+`Custom Theme` harus terpasang sebagai parent, dan plugin **Travel Aja Content Types** harus aktif untuk mendaftarkan post type `destinasi`, `paket_wisata`, dan `transportasi`. Polylang menyediakan pengalihan bahasa dan pasangan terjemahan; tanpa Polylang, tampilkan satu bahasa. WP Travel Engine tidak digunakan sebagai dependensi oleh template ini.
+
+Untuk data contoh, plugin konten, impor WXR, dan langkah setup halaman bilingual, ikuti [README repository](../../../README.md).

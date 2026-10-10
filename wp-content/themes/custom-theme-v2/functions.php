@@ -2,8 +2,8 @@
 /**
  * Setup Custom Theme 2.
  *
- * Semua tipe konten dan field tetap disediakan oleh tema induk agar data yang
- * sudah dimasukkan melalui wp-admin dapat langsung digunakan.
+ * Tipe konten disediakan oleh plugin Travel Aja Content Types; field dan query
+ * dasarnya berasal dari tema induk.
  *
  * @package Custom_Theme_V2
  */
@@ -110,22 +110,105 @@ add_action(
 );
 
 /**
- * Find a published page by slug and return a safe fallback URL.
+ * Resolve a post to its translation in the active Polylang language.
+ * Returns 0 when that translation has not been created yet.
+ */
+function travel_aja_v2_translated_post_id( $post_id, $language = '' ) {
+	$post_id = (int) $post_id;
+	if ( ! $post_id || ! function_exists( 'pll_get_post' ) || ! function_exists( 'pll_current_language' ) ) {
+		return 0;
+	}
+
+	$language = $language ? $language : pll_current_language();
+	if ( ! $language ) {
+		return 0;
+	}
+
+	return (int) pll_get_post( $post_id, $language );
+}
+
+/**
+ * Find a published page by slug and return its active-language URL.
  */
 function travel_aja_v2_page_url( $slug, $fallback = '/' ) {
-	$page = get_page_by_path( $slug );
+	$page = get_page_by_path( $slug, OBJECT, 'page' );
 	if ( $page instanceof WP_Post && 'publish' === $page->post_status ) {
-		return get_permalink( $page );
+		$page_id = (int) $page->ID;
+		if ( function_exists( 'pll_current_language' ) && function_exists( 'pll_get_post' ) ) {
+			$translated_id = travel_aja_v2_translated_post_id( $page_id );
+			if ( $translated_id ) {
+				$page_id = $translated_id;
+			} elseif ( pll_current_language() !== pll_default_language() ) {
+				// Never send visitors to a page in another language just because its
+				// translation has not been created yet.
+				return function_exists( 'pll_home_url' ) ? pll_home_url() : home_url( '/' );
+			}
+		}
+		return get_permalink( $page_id );
+	}
+
+	if ( function_exists( 'pll_current_language' ) && function_exists( 'pll_home_url' ) && pll_current_language() !== pll_default_language() ) {
+		return pll_home_url();
 	}
 	return home_url( $fallback );
 }
+
+/**
+ * Menus can contain links to the default-language page even when an English
+ * menu exists. Resolve those page items through Polylang before rendering.
+ */
+add_filter(
+	'wp_nav_menu_objects',
+	function ( $items ) {
+		if ( ! function_exists( 'pll_current_language' ) || ! function_exists( 'pll_get_post' ) ) {
+			return $items;
+		}
+
+		$language = pll_current_language();
+		if ( ! $language || $language === pll_default_language() ) {
+			return $items;
+		}
+
+		foreach ( $items as $item ) {
+			if ( 'post_type' !== $item->type || 'page' !== $item->object || empty( $item->object_id ) ) {
+				continue;
+			}
+
+			$translated_id = travel_aja_v2_translated_post_id( $item->object_id, $language );
+			if ( $translated_id ) {
+				$item->object_id = $translated_id;
+				$item->url       = get_permalink( $translated_id );
+				continue;
+			}
+
+			$source_page = get_post( (int) $item->object_id );
+			if ( $source_page instanceof WP_Post ) {
+				$listing_types = array(
+					'destinasi'    => 'destinasi',
+					'paket-wisata' => 'paket_wisata',
+					'transportasi' => 'transportasi',
+				);
+				if ( isset( $listing_types[ $source_page->post_name ] ) && function_exists( 'custom_theme_listing_url' ) ) {
+					$item->url = custom_theme_listing_url( $listing_types[ $source_page->post_name ] );
+				} else {
+					// A missing translation must not silently switch the visitor back
+					// to the default-language page.
+					$item->url = function_exists( 'pll_home_url' ) ? pll_home_url( $language ) : home_url( '/' );
+				}
+			}
+		}
+
+		return $items;
+	},
+	20
+);
 
 /**
  * Format a price saved as an integer in post meta.
  */
 function travel_aja_v2_price( $price, $fallback = 'Hubungi kami' ) {
 	if ( '' === trim( (string) $price ) || ! is_numeric( $price ) ) {
-		return $fallback;
+		return function_exists( 'travel_aja_v2_ui_text' ) ? travel_aja_v2_ui_text( $fallback ) : $fallback;
 	}
 	return 'Rp ' . number_format( (float) $price, 0, ',', '.' );
 }
@@ -206,6 +289,7 @@ function travel_aja_v2_ui_translations() {
 			'Kategori' => 'Category',
 			'Kategori Panduan' => 'Guide Categories',
 			'Kategori panduan' => 'Guide categories',
+			'Gunung Bromo' => 'Mount Bromo',
 			'Kebijakan Privasi' => 'Privacy Policy',
 			'Kembali ke' => 'Back to',
 			'Kembali ke daftar' => 'Back to list',
@@ -283,6 +367,9 @@ function travel_aja_v2_ui_translations() {
 			'Terlaris' => 'Best seller',
 			'Tidak ada hasil untuk: %s' => 'No results for: %s',
 			'Tim lokal siap membantu sebelum dan selama perjalanan.' => 'Our local team is here to help before and during your trip.',
+			'Tipe' => 'Type',
+			'Kapasitas' => 'Capacity',
+			'Transmisi' => 'Transmission',
 			'Tulis komentar atau pertanyaan Anda...' => 'Write your comment or question...',
 			'Tutup pratinjau' => 'Close preview',
 			'Untuk pertanyaan perjalanan, silakan kunjungi halaman Kontak Kami.' => 'For travel questions, please visit our Contact Us page.',
@@ -292,6 +379,15 @@ function travel_aja_v2_ui_translations() {
 	}
 
 	return $map;
+}
+
+/** Translate a theme string used outside the gettext functions. */
+function travel_aja_v2_ui_text( $text ) {
+	if ( ! function_exists( 'pll_current_language' ) || 'en' !== pll_current_language() ) {
+		return $text;
+	}
+	$map = travel_aja_v2_ui_translations();
+	return isset( $map[ $text ] ) ? $map[ $text ] : $text;
 }
 
 add_filter(

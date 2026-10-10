@@ -4,7 +4,7 @@ $email    = sanitize_email( get_theme_mod( 'travel_email', '' ) );
 $address  = trim( (string) get_theme_mod( 'travel_office_address', '' ) );
 $hours    = trim( (string) get_theme_mod( 'travel_hours', '' ) );
 ?>
-<footer class="v2-footer" id="contact">
+<footer class="v2-footer">
 	<div class="v2-shell v2-footer__grid">
 		<div class="v2-footer__about">
 			<a class="v2-footer__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">TRAVEL AJA</a>

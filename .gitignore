@@ -2,9 +2,26 @@
 /*
 !.gitignore
 !README.md
+!demo-content/
+!docs/
+!blueprints/
 !wp-content/
 wp-content/*
 !wp-content/themes/
 wp-content/themes/*
 !wp-content/themes/custom-theme/
 !wp-content/themes/custom-theme-v2/
+!wp-content/plugins/
+wp-content/plugins/*
+!wp-content/plugins/travel-aja-content/
+
+# Keep local configuration, database exports, and runtime output out of Git.
+.env
+.env.*
+**/.env
+**/.env.*
+wp-config.php
+**/wp-config.php
+*.sql
+*.sql.gz
+*.log

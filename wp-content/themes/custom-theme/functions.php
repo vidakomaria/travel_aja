@@ -1,6 +1,6 @@
 <?php
 /**
- * Fitur dasar tema. Data dan tipe konten tetap dikelola oleh WordPress/plugin.
+ * Fitur dasar tema. Travel Aja Content Types mendaftarkan tipe konten di luar tema.
  *
  * @package Custom_Theme
  */
@@ -58,7 +58,7 @@ add_action( 'wp_enqueue_scripts', function () {
  if ( is_front_page() ) {
   wp_enqueue_script( 'custom-theme-home', get_theme_file_uri( 'assets/js/home.js' ), array(), (string) filemtime( get_theme_file_path( 'assets/js/home.js' ) ), true );
  }
- if ( is_page( 'tentang-kami' ) ) {
+ if ( is_page( array( 'tentang-kami', 'about-us' ) ) ) {
   wp_enqueue_script( 'custom-theme-contact', get_theme_file_uri( 'assets/js/contact.js' ), array(), (string) filemtime( get_theme_file_path( 'assets/js/contact.js' ) ), true );
  }
 } );
